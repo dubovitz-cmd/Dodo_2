@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dododouble Számláló</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #00ffea;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 4rem;
+      text-shadow: 0 0 10px #00ffea;
+    }
+    button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1.5rem;
+      background: none;
+      border: 2px solid #00ffea;
+      color: #00ffea;
+      cursor: pointer;
+      transition: 0.2s;
+      text-shadow: 0 0 5px #00ffea;
+    }
+    button:hover {
+      background-color: #00ffea;
+      color: #0f0f0f;
+      box-shadow: 0 0 20px #00ffea;
+    }
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="counter">0</h1>
+  <button id="incrementBtn">Növeld a számlálót</button>
+
+  <footer>v1</footer>
+
+  <script>
+    const counterEl = document.getElementById('counter');
+    const btn = document.getElementById('incrementBtn');
+
+    let counter = 0;
+
+    btn.addEventListener('click', () => {
+      counter++;
+      counterEl.textContent = counter;
+    });
+  </script>
+</body>
+</html>
