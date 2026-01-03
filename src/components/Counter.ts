@@ -1,35 +1,55 @@
-import { supabase } from './supabase';
+import { useState, useEffect } from 'react';
 
-export interface CounterData {
+interface CounterProps {
   value: number;
+  isLoading?: boolean;
 }
 
-export async function getCounterValue(): Promise<number> {
-  const { data, error } = await supabase
-    .from('counter')
-    .select('value')
-    .limit(1)
-    .maybeSingle();
+export function Counter({ value, isLoading = false }: CounterProps) {
+  const [displayValue, setDisplayValue] = useState(value);
 
-  if (error) {
-    console.error('Error fetching counter:', error);
-    return 0;
-  }
+  useEffect(() => {
+    if (displayValue === value) return;
 
-  return data?.value || 0;
-}
+    const difference = value - displayValue;
+    const steps = Math.abs(difference);
+    const duration = Math.min(800, steps * 15);
+    const stepDuration = duration / steps;
 
-export function subscribeToCounter(
-  callback: (value: number) => void
-) {
-  const subscription = supabase
-    .from('counter')
-    .on('*', (payload) => {
-      if (payload.new) {
-        callback(payload.new.value);
+    let currentStep = 0;
+    let lastTime = Date.now();
+
+    const animate = () => {
+      const now = Date.now();
+      const elapsed = now - lastTime;
+
+      if (elapsed >= stepDuration) {
+        currentStep++;
+        const direction = difference > 0 ? 1 : -1;
+        setDisplayValue((prev) => prev + direction);
+        lastTime = now;
       }
-    })
-    .subscribe();
 
-  return subscription;
+      if (currentStep < steps) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [value, displayValue]);
+
+  return (
+    <div className="text-center">
+      <div className="mb-4">
+        <div className="text-7xl font-bold text-blue-600 tabular-nums tracking-tight">
+          {displayValue.toLocaleString('hu-HU')}
+        </div>
+      </div>
+      {isLoading && (
+        <div className="text-gray-400 text-sm">
+          Betöltés...
+        </div>
+      )}
+    </div>
+  );
 }
